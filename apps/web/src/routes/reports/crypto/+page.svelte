@@ -51,7 +51,9 @@
     return `M 0 ${points[0]} L 15 ${points[1]} L 30 ${points[2]} L 45 ${points[3]} L 60 ${points[4]}`;
   }
 
-  const maxMarketCap = $derived(Math.max(...data.coins.slice(0, 10).map((c) => c.market_cap)));
+  const maxMarketCap = $derived(
+    data.coins.length > 0 ? Math.max(...data.coins.slice(0, 10).map((c) => c.market_cap)) : 1,
+  );
 
   function sortArrow(key: SortKey): string {
     if (sortKey !== key) return '↕';

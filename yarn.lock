@@ -1814,7 +1814,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@remotion/renderer@npm:4.0.481, @remotion/renderer@npm:^4.0.0":
+"@remotion/renderer@npm:*, @remotion/renderer@npm:4.0.481, @remotion/renderer@npm:^4.0.0":
   version: 4.0.481
   resolution: "@remotion/renderer@npm:4.0.481"
   dependencies:
@@ -2238,6 +2238,7 @@ __metadata:
   dependencies:
     "@inlang/paraglide-sveltekit": "npm:^0.16.1"
     "@remotion/player": "npm:*"
+    "@remotion/renderer": "npm:*"
     "@repo/eslint-config": "workspace:*"
     "@repo/flags-store": "workspace:*"
     "@repo/remotion-compositions": "workspace:*"

@@ -1,6 +1,19 @@
 import type { PageServerLoad } from './$types';
 
-interface CoinData {
+// CoinCap v2 — free, no API key required.
+// https://docs.coincap.io/
+interface CoinCapAsset {
+  id: string;
+  rank: string;
+  symbol: string;
+  name: string;
+  priceUsd: string;
+  changePercent24Hr: string;
+  marketCapUsd: string;
+  volumeUsd24Hr: string;
+}
+
+export interface CoinData {
   id: string;
   symbol: string;
   name: string;
@@ -44,31 +57,54 @@ export interface RegionStat {
   population: number;
 }
 
+function coinCapToCoinData(a: CoinCapAsset): CoinData {
+  return {
+    id: a.id,
+    symbol: a.symbol.toLowerCase(),
+    name: a.name,
+    current_price: parseFloat(a.priceUsd) || 0,
+    price_change_percentage_24h: parseFloat(a.changePercent24Hr) || 0,
+    market_cap: parseFloat(a.marketCapUsd) || 0,
+    // CoinCap doesn't provide logo URLs; use a generic crypto icon service
+    image: `https://assets.coincap.io/assets/icons/${a.symbol.toLowerCase()}@2x.png`,
+  };
+}
+
+const TIMEOUT_MS = 8_000;
+
 export const load: PageServerLoad = async ({ fetch }) => {
   const [cryptoRes, exchangeRes, countriesRes] = await Promise.allSettled([
-    fetch(
-      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=8&page=1',
-    ),
-    fetch('https://api.frankfurter.app/latest'),
-    fetch(
-      'https://restcountries.com/v3.1/all?fields=name,population,region,flags,capital,area',
-    ),
+    fetch('https://api.coincap.io/v2/assets?limit=8', { signal: AbortSignal.timeout(TIMEOUT_MS) }),
+    fetch('https://api.frankfurter.app/latest', { signal: AbortSignal.timeout(TIMEOUT_MS) }),
+    fetch('https://restcountries.com/v3.1/all?fields=name,population,region,flags,capital,area', { signal: AbortSignal.timeout(TIMEOUT_MS) }),
   ]);
 
-  const crypto: CoinData[] =
-    cryptoRes.status === 'fulfilled' && cryptoRes.value.ok
-      ? await cryptoRes.value.json()
-      : [];
+  let crypto: CoinData[] = [];
+  if (cryptoRes.status === 'fulfilled' && cryptoRes.value.ok) {
+    try {
+      // CoinCap wraps data in { data: [...] }
+      const json = (await cryptoRes.value.json()) as { data: CoinCapAsset[] };
+      crypto = (json.data ?? []).map(coinCapToCoinData);
+    } catch {
+      // leave as []
+    }
+  }
 
-  const exchange: ExchangeRates =
+  const exchangeJson =
     exchangeRes.status === 'fulfilled' && exchangeRes.value.ok
       ? await exchangeRes.value.json()
+      : null;
+  const exchange: ExchangeRates =
+    exchangeJson && typeof exchangeJson === 'object' && 'rates' in exchangeJson
+      ? (exchangeJson as ExchangeRates)
       : { base: 'EUR', date: '', rates: {} };
 
-  const rawCountries: RestCountry[] =
+  const rawCountriesJson =
     countriesRes.status === 'fulfilled' && countriesRes.value.ok
       ? await countriesRes.value.json()
       : [];
+  // API may return an error object instead of an array on failures/rate-limits
+  const rawCountries: RestCountry[] = Array.isArray(rawCountriesJson) ? rawCountriesJson : [];
 
   const countries: CountryStat[] = rawCountries
     .sort((a, b) => b.population - a.population)

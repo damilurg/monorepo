@@ -1,7 +1,11 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-export const GET: RequestHandler = () => {
+export const GET: RequestHandler = ({ url }) => {
+  // Use the request origin so docs always point to the current deployment.
+  // Falls back to ORIGIN env var (set by SvelteKit adapter-node), then localhost for dev.
+  const origin = url.origin !== 'null' ? url.origin : (process.env.ORIGIN ?? 'http://localhost:5173');
+
   const spec = {
     openapi: '3.0.3',
     info: {
@@ -12,18 +16,14 @@ Includes:
 - **Internal proxy routes** served by SvelteKit +server.ts endpoints
 - **External APIs** consumed by the portal (documented for transparency)
 
-All internal routes are available at \`localhost:5173\`. External APIs are third-party services.
+All internal routes are served from \`${origin}\`. External APIs are third-party services.
 
 > **Note:** External API paths (prefixed with \`https://\`) are listed for documentation purposes only. The "Try it out" button will not work for them due to cross-origin restrictions — use the linked external docs or a tool like curl instead.`,
       version: '1.0.0',
       contact: { name: 'Portal Team' },
     },
     servers: [
-      { url: 'http://localhost:5173', description: 'Development server (main portal)' },
-      { url: 'http://localhost:5174', description: 'Admin panel (dev)' },
-      { url: 'http://localhost:5181', description: 'Bank app (dev)' },
-      { url: 'http://localhost:5182', description: 'DevTools (dev)' },
-      { url: 'http://localhost:5184', description: 'Reports dashboard (dev)' },
+      { url: origin, description: 'Portal (current deployment)' },
     ],
     tags: [
       { name: 'Exchange', description: 'Currency exchange rates and conversion' },
@@ -40,7 +40,7 @@ All internal routes are available at \`localhost:5173\`. External APIs are third
       { name: 'External — JSONPlaceholder', description: 'External: jsonplaceholder.typicode.com' },
       { name: 'External — DummyJSON', description: 'External: dummyjson.com quotes' },
       { name: 'External — REST Countries', description: 'External: restcountries.com' },
-      { name: 'External — CoinGecko', description: 'External: api.coingecko.com crypto market data' },
+      { name: 'External — CoinCap', description: 'External: api.coincap.io crypto market data' },
     ],
     paths: {
       // ── INTERNAL PROXY ROUTES ──────────────────────────────────────────

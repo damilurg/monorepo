@@ -32,9 +32,11 @@ export const load: PageServerLoad = async ({ fetch }) => {
   try {
     const res = await fetch(
       'https://restcountries.com/v3.1/all?fields=name,population,region,subregion,flags,capital,area,currencies,languages',
+      { signal: AbortSignal.timeout(8_000) },
     );
     if (res.ok) {
-      const raw: RawCountry[] = await res.json();
+      const parsed = await res.json();
+      const raw: RawCountry[] = Array.isArray(parsed) ? parsed : [];
       worldPopulation = raw.reduce((s, c) => s + c.population, 0);
       countries = raw
         .sort((a, b) => a.name.common.localeCompare(b.name.common))

@@ -1,3 +1,6 @@
+/** Default timeout for all outbound HTTP requests (ms). Override per-call via `signal`. */
+export const DEFAULT_TIMEOUT_MS = 8_000;
+
 export class ApiError extends Error {
   constructor(
     public readonly status: number,
@@ -13,20 +16,31 @@ export interface RequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
   body?: unknown;
+  /** Pass an explicit signal to override the default timeout. */
   signal?: AbortSignal;
+  /** Override the timeout in ms. Pass `0` to disable. Defaults to DEFAULT_TIMEOUT_MS. */
+  timeoutMs?: number;
+}
+
+/** Create an AbortSignal that fires after `ms` milliseconds. */
+export function timeoutSignal(ms: number): AbortSignal {
+  return AbortSignal.timeout(ms);
 }
 
 export async function httpGet<T>(
   url: string,
   options: Omit<RequestOptions, 'method' | 'body'> = {}
 ): Promise<T> {
+  const { signal, timeoutMs = DEFAULT_TIMEOUT_MS, headers } = options;
+  const effectiveSignal = signal ?? (timeoutMs > 0 ? timeoutSignal(timeoutMs) : undefined);
+
   const response = await fetch(url, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
-      ...options.headers,
+      ...headers,
     },
-    signal: options.signal,
+    signal: effectiveSignal,
   });
 
   if (!response.ok) {
@@ -45,15 +59,18 @@ export async function httpPost<T>(
   body: unknown,
   options: Omit<RequestOptions, 'method' | 'body'> = {}
 ): Promise<T> {
+  const { signal, timeoutMs = DEFAULT_TIMEOUT_MS, headers } = options;
+  const effectiveSignal = signal ?? (timeoutMs > 0 ? timeoutSignal(timeoutMs) : undefined);
+
   const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      ...options.headers,
+      ...headers,
     },
     body: JSON.stringify(body),
-    signal: options.signal,
+    signal: effectiveSignal,
   });
 
   if (!response.ok) {

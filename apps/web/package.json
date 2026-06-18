@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@remotion/player": "*",
+    "@remotion/renderer": "*",
     "@repo/flags-store": "workspace:*",
     "@repo/remotion-compositions": "workspace:*",
     "@repo/shared": "workspace:*",

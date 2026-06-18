@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import type { Transaction } from '$lib/data/mock-banking.js';
+  import type { Transaction } from '$lib/data/bank-data/mock-banking.js';
 
   let { data }: { data: PageData } = $props();
 

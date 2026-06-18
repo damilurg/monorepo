@@ -1,139 +1,108 @@
 # Automotive Portal — SvelteKit Monorepo
 
-Монорепозиторий на базе **Svelte 5 + SvelteKit**, содержащий портальные модули и несколько standalone-приложений — все доступны через один домен на одном порту.
+**Svelte 5 + SvelteKit** monorepo. One domain, one port — all portal modules and standalone apps served from `apps/web` at `:5173`.
 
-## Быстрый старт
+## Quick Start
 
 ```bash
-corepack enable          # активирует Yarn 4 через corepack
+corepack enable   # activates Yarn 4 via corepack
 yarn install
-yarn dev                 # http://localhost:5173
+yarn dev          # http://localhost:5173
 ```
 
-## Команды
+## Commands
 
-```bash
-yarn dev                       # основной портал (apps/web) → :5173
-yarn build                     # production-сборка apps/web
-yarn check                     # svelte-check + tsc по всем пакетам
-yarn lint                      # ESLint по всем пакетам
-yarn test                      # Vitest unit-тесты
-yarn test:e2e                  # Playwright e2e
-yarn test:coverage             # покрытие (v8)
+| Command | What it does |
+|---------|-------------|
+| `yarn dev` | Start main portal (`apps/web`) → `:5173` |
+| `yarn build` | Production build: `apps/web` + all standalone apps |
+| `yarn build:web` | Build `apps/web` only |
+| `yarn build:standalone` | Build admin, bank, devtools, reports |
+| `yarn lint` | ESLint across all workspaces |
+| `yarn check` | `svelte-check` + `tsc` across all workspaces |
+| `yarn test` | Vitest unit tests |
+| `yarn test:e2e` | Playwright end-to-end tests |
+| `yarn test:all` | Unit + e2e |
+| `yarn dev:standalone:admin` | Run `apps/admin` standalone → `:5174` |
+| `yarn dev:standalone:bank` | Run `apps/bank` standalone |
+| `yarn dev:standalone:devtools` | Run `apps/devtools` standalone |
+| `yarn dev:standalone:reports` | Run `apps/reports` standalone |
+| `yarn dev:standalone:remotion` | Run `apps/remotion-app` standalone |
 
-# Standalone-приложения (извлечённые, для отдельного деплоя)
-yarn dev:standalone:admin
-yarn dev:standalone:bank
-yarn dev:standalone:devtools
-yarn dev:standalone:remotion
-yarn dev:standalone:reports
-```
-
-## Структура
+## Structure
 
 ```
 repo/
 ├── apps/
-│   ├── web/                         # Единая точка входа — :5173
-│   │   ├── src/
-│   │   │   ├── hooks.server.ts      # feature flags + render mode
-│   │   │   ├── routes/
-│   │   │   │   ├── (portal)/        # layout-группа: portal nav + langStore
-│   │   │   │   │   ├── +layout.svelte
-│   │   │   │   │   ├── +page.svelte # главная — карточки модулей
-│   │   │   │   │   ├── exchange/    # +page.svelte · +page.server.ts · +server.ts
-│   │   │   │   │   ├── blog/        # + /blog/[id]/
-│   │   │   │   │   ├── content/
-│   │   │   │   │   ├── weather/     # + /weather/city/[city]/
-│   │   │   │   │   ├── cars/
-│   │   │   │   │   └── maps/        # + /maps/[lat]/[lon]/
-│   │   │   │   ├── admin/           # /admin — панель управления флагами
-│   │   │   │   ├── bank/            # /bank — банковский лендинг
-│   │   │   │   ├── devtools/        # /devtools — симулятор устройств
-│   │   │   │   ├── remotion/        # /remotion — Remotion видео-генератор
-│   │   │   │   └── reports/         # /reports — аналитический дашборд
-│   │   │   ├── modules/             # бизнес-логика (изолированные модули)
-│   │   │   │   ├── exchange/        # api/ · model/ · server/ · config/ · index.ts
-│   │   │   │   ├── blog/
-│   │   │   │   ├── content/
-│   │   │   │   ├── weather/
-│   │   │   │   ├── cars/
-│   │   │   │   └── maps/
-│   │   │   └── lib/
-│   │   │       ├── lang-store.svelte.ts   # portal-wide RU/EN store
-│   │   │       ├── admin-i18n.svelte.ts   # admin i18n singleton
-│   │   │       └── player-mount.tsx       # React/Remotion mount helper
-│   │   └── .env / .env.example
-│   │
-│   ├── admin/      # standalone: извлекаемая admin-панель
-│   ├── bank/       # standalone: банковский лендинг
-│   ├── devtools/   # standalone: симулятор устройств
-│   ├── remotion/   # standalone: Remotion Studio
-│   └── reports/    # standalone: дашборд
-│
-├── packages/
-│   ├── shared/                       # @repo/shared
+│   ├── web/                          # @repo/web — single entry point (:5173)
 │   │   └── src/
-│   │       ├── api/                  # HTTP-клиент, ApiError
-│   │       ├── feature-flags/        # FeatureFlagConfig, RenderModeFlagConfig
-│   │       ├── config/               # ModuleConfig, APP_CONFIG
-│   │       ├── i18n/                 # createI18nStore, LangToggle
-│   │       ├── utils/                # date, currency, helpers
-│   │       └── ui/                   # Button, Card, Input, Loader, EmptyState, ErrorState, PageHeader
-│   ├── remotion-compositions/        # @repo/remotion-compositions
-│   ├── flags-store/                  # @repo/flags-store
-│   ├── tsconfig/
-│   └── eslint-config/
+│   │       ├── hooks.server.ts       # feature flags, render mode, auth
+│   │       ├── routes/
+│   │       │   ├── (portal)/         # layout group: shared nav + langStore
+│   │       │   │   ├── exchange/     # +page.svelte, +page.server.ts, +server.ts
+│   │       │   │   ├── blog/         # /blog/[id]/
+│   │       │   │   ├── content/
+│   │       │   │   ├── weather/      # /weather/city/[city]/
+│   │       │   │   ├── cars/
+│   │       │   │   └── maps/         # /maps/[lat]/[lon]/
+│   │       │   ├── admin/            # flag management dashboard
+│   │       │   ├── bank/
+│   │       │   ├── devtools/
+│   │       │   ├── remotion/
+│   │       │   └── reports/
+│   │       └── modules/              # business logic — isolated per module
+│   │           ├── exchange/         # api/ · model/ · server/ · config/ · index.ts
+│   │           ├── blog/
+│   │           ├── content/
+│   │           ├── weather/
+│   │           ├── cars/
+│   │           └── maps/
+│   ├── admin/      # @repo/admin    — extractable standalone admin app
+│   ├── bank/       # @repo/bank     — extractable standalone bank app
+│   ├── devtools/   # @repo/devtools — extractable standalone devtools app
+│   ├── reports/    # @repo/reports  — extractable standalone reports app
+│   └── remotion/   # @repo/remotion-app — Remotion Studio
 │
-├── vitest.config.ts
-├── vitest.setup.ts
-├── vitest.mocks/                     # stubs: $app/environment · navigation · stores
-├── playwright.config.ts
-└── .gitignore
+└── packages/
+    ├── shared/              # @repo/shared — api, utils, ui, feature-flags, i18n, config
+    ├── flags-store/         # @repo/flags-store — file-based runtime flag overrides
+    ├── remotion-compositions/
+    ├── tsconfig/
+    └── eslint-config/
 ```
 
-## Архитектура: Route = оболочка, Module = продукт
+## Routes
 
-Каждый модуль — самодостаточный продукт с публичным API:
+| Route | External API | Description |
+|-------|-------------|-------------|
+| `/` | — | Landing page, module cards |
+| `/exchange` | frankfurter.dev/v1/latest | Currency rates & converter |
+| `/blog` | jsonplaceholder.typicode.com | Posts list + detail |
+| `/content` | dummyjson.com/quotes | Quotes with search |
+| `/weather` | open-meteo.com + Nominatim | Weather + 7-day forecast |
+| `/cars` | vpic.nhtsa.dot.gov/api | VIN decoder |
+| `/maps` | OpenStreetMap + Nominatim | Map + geocoding |
+| `/admin` | internal flags API | Feature flag management |
+| `/bank` | — | Banking landing page |
+| `/devtools` | — | Mobile device simulator |
+| `/remotion` | @remotion/player | Video generator |
+| `/reports` | public APIs | Analytics dashboard |
+| `/api-docs` | — | OpenAPI / Swagger UI |
 
-```
-modules/exchange/
-  api/              прямые вызовы внешнего API (только server-side)
-  model/            типы, константы, DTO-трансформы
-  server/
-    load.ts         SSR loader
-    handler.ts      API proxy handler
-  config/
-    module.config.ts
-  index.ts          публичный API модуля
-```
+## Architecture
 
-Маршрут — тонкая оболочка:
+**Route = thin shell. Module = self-contained product.**
 
-```
-routes/(portal)/exchange/
-  +page.server.ts   вызывает loadExchangeData() или возвращает SPA-оболочку
-  +page.svelte      UI — получает только подготовленные данные
-  +server.ts        API proxy (GET /exchange?base=USD)
-```
+Routes in `src/routes/(portal)/<module>/` only: check `locals.featureEnabled`, check `locals.renderMode`, pass data to Svelte components.
 
-**Правило изоляции** — запрещено:
-```ts
-import { something } from '$modules/blog'   // внутри другого модуля
-```
-Разрешено только:
-```ts
-import { ... } from '@repo/shared'
-import { ... } from '@repo/shared/api'
-import { ... } from '@repo/shared/ui'
-```
+Business logic lives in `src/modules/<module>/` and depends only on `@repo/shared`. Cross-module imports are forbidden — anything shared between modules belongs in `@repo/shared`.
 
 ## Feature Flags
 
-Все модули и standalone-приложения управляются через переменные окружения и admin-панель `/admin`.
+All modules are controlled via ENV variables and the runtime admin dashboard at `/admin`.
 
 ```env
-# Портальные модули
+# Portal modules (support SSR/SPA render mode toggle)
 PUBLIC_FEATURE_EXCHANGE=true
 PUBLIC_FEATURE_BLOG=true
 PUBLIC_FEATURE_CONTENT=true
@@ -141,7 +110,7 @@ PUBLIC_FEATURE_WEATHER=true
 PUBLIC_FEATURE_CARS=true
 PUBLIC_FEATURE_MAPS=true
 
-# Standalone-приложения
+# Standalone apps embedded in apps/web (always SSR)
 PUBLIC_FEATURE_ADMIN=true
 PUBLIC_FEATURE_BANK=true
 PUBLIC_FEATURE_DEVTOOLS=true
@@ -149,71 +118,22 @@ PUBLIC_FEATURE_REMOTION=true
 PUBLIC_FEATURE_REPORTS=true
 ```
 
-При `false`: UI показывает экран «Раздел временно недоступен», API возвращает `403`.  
-Admin-панель (`/admin`) **всегда доступна** — чтобы можно было повторно включить отключённые флаги.
+When `false`: UI shows "Section unavailable", API returns `403`. The `/admin` route is always accessible so disabled flags can be re-enabled. Runtime overrides written via the admin dashboard take effect immediately without a restart (read on every request by `hooks.server.ts`).
 
-## Render Mode (SSR / SPA)
+## Production Deployment Notes
 
-```env
-PUBLIC_RENDER_MODE_EXCHANGE=ssr   # ssr (default) | spa
-PUBLIC_RENDER_MODE_BLOG=ssr
-# ...
-```
+- **`ADMIN_SECRET`** must be set in both `apps/web/.env` and `apps/admin/.env` with the same value.
+- **`FLAGS_STORE_PATH`** must point to the same file path in both apps if you use runtime flag overrides.
+- All external API calls have an 8-second timeout via `AbortSignal.timeout`.
+- Web Vitals are sent to `POST /api/vitals` — extend that handler to forward to your observability backend.
+- OpenAPI spec is available at `/api-docs` (Swagger UI).
 
-**SSR** — данные загружаются сервером, HTML пре-рендеренный, SEO-friendly.  
-**SPA** — сервер отдаёт пустую оболочку, данные грузятся клиентом через внутренний proxy.
-
-## Локализация (RU / EN)
-
-Глобальный `langStore` (cookie + localStorage) управляет языком по всему порталу.  
-Переключатель в навигационной шапке меняет язык синхронно на всех страницах.
-
-## Добавление нового модуля
-
-```bash
-# 1. Модуль
-mkdir -p apps/web/src/modules/insurance/{api,model,server,config}
-# 2. Маршрут
-mkdir apps/web/src/routes/\(portal\)/insurance
-# 3. Флаги в .env
-echo "PUBLIC_FEATURE_INSURANCE=true" >> apps/web/.env
-echo "PUBLIC_RENDER_MODE_INSURANCE=ssr" >> apps/web/.env
-# 4. Зарегистрировать в hooks.server.ts (MODULE_ROUTES)
-```
-
-Существующие модули не затрагиваются.
-
-## Переносимость модулей
-
-```bash
-cp -r apps/web/src/modules/exchange ./standalone/src/modules/
-cp -r packages/shared ./standalone/packages/shared
-# Добавить свой SvelteKit проект — бизнес-логика не меняется
-```
-
-## Приложения
-
-| Маршрут       | API                               | Описание                       |
-|---------------|-----------------------------------|--------------------------------|
-| `/`           | —                                 | Главная, карточки модулей      |
-| `/exchange`   | frankfurter.dev/v1/latest         | Курсы валют, конвертер         |
-| `/blog`       | jsonplaceholder.typicode.com      | Список постов + детальная      |
-| `/content`    | dummyjson.com/quotes              | Цитаты с поиском               |
-| `/weather`    | open-meteo.com + Nominatim        | Погода + 7-дневный прогноз     |
-| `/cars`       | vpic.nhtsa.dot.gov/api            | VIN-декодер                    |
-| `/maps`       | OpenStreetMap + Nominatim         | Карта + геокодирование         |
-| `/admin`      | internal flags API                | Управление feature flags       |
-| `/bank`       | —                                 | Банковский лендинг             |
-| `/devtools`   | —                                 | Симулятор мобильных устройств  |
-| `/remotion`   | @remotion/player                  | Видео-генератор                |
-| `/reports`    | open-source публичные API         | Аналитический дашборд         |
-
-## Технологии
+## Tech Stack
 
 - Svelte 5, SvelteKit, TypeScript
-- Yarn 4 (nodeLinker: node-modules)
-- Vite 6, @sveltejs/adapter-node
+- Yarn 4 (Berry, nodeLinker: node-modules)
+- Vite 6, `@sveltejs/adapter-node`
 - Tailwind CSS v4
-- React 18 + Remotion 4 (для /remotion)
-- Vitest 4 + @testing-library/svelte + Playwright
-- ESLint (flat config), Prettier, Husky + lint-staged
+- React 18 + Remotion 4 (for `/remotion`)
+- Vitest + `@testing-library/svelte`, Playwright
+- ESLint flat config, Prettier, Husky + lint-staged

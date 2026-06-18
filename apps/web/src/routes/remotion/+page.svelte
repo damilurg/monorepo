@@ -439,7 +439,75 @@
         </div>
       </div>
 
-      <!-- Easter egg: аало арсен, лям двести -->
+      <!-- ТЕМКА -->
+      <a
+        href="https://www.youtube.com/watch?v=exWPDyvbKis"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group block rounded-2xl border border-slate-800 hover:border-yellow-600/50 bg-slate-900 hover:bg-slate-900/80 transition-all duration-300 overflow-hidden"
+      >
+        <!-- Header bar -->
+        <div class="flex items-center justify-between px-4 py-2.5 border-b border-slate-800 group-hover:border-yellow-600/30 transition-colors">
+          <div class="flex items-center gap-2">
+            <span class="text-sm">📟</span>
+            <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 group-hover:text-yellow-500/80 transition-colors">
+              ТЕМКА
+            </span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-slate-700 group-hover:bg-yellow-500 transition-colors animate-pulse"></span>
+            <span class="text-[10px] text-slate-700 group-hover:text-yellow-600/60 transition-colors font-mono">LIVE</span>
+          </div>
+        </div>
+
+        <!-- Meme content -->
+        <div class="px-4 py-4 space-y-3">
+          <!-- Incoming call -->
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-sm shrink-0 mt-0.5 group-hover:bg-yellow-900/30 transition-colors border border-slate-700 group-hover:border-yellow-700/40">
+              📞
+            </div>
+            <div class="flex-1 space-y-2">
+              <div class="inline-block bg-slate-800 group-hover:bg-slate-700/80 transition-colors rounded-2xl rounded-tl-sm px-4 py-2.5 max-w-prose">
+                <p class="text-[13px] font-bold text-slate-200 leading-snug tracking-wide">
+                  Алооооо&nbsp;Арсееен,
+                </p>
+              </div>
+              <div class="inline-block bg-slate-800 group-hover:bg-slate-700/80 transition-colors rounded-2xl rounded-tl-sm px-4 py-2.5 max-w-prose">
+                <p class="text-[13px] font-bold text-slate-200 leading-snug tracking-wide">
+                  тут звоню — по трем
+                </p>
+              </div>
+              <div class="inline-block bg-yellow-900/30 group-hover:bg-yellow-800/40 transition-colors rounded-2xl rounded-tl-sm px-4 py-2.5 max-w-prose border border-yellow-800/30 group-hover:border-yellow-700/50">
+                <p class="text-[15px] font-black text-yellow-300 leading-snug tracking-widest uppercase">
+                  ББББММВВ 🚗🚗🚗
+                </p>
+              </div>
+              <div class="inline-block bg-emerald-900/30 group-hover:bg-emerald-800/40 transition-colors rounded-2xl rounded-tl-sm px-4 py-2.5 max-w-prose border border-emerald-800/30 group-hover:border-emerald-700/50">
+                <p class="text-[15px] font-black text-emerald-300 leading-snug tracking-widest uppercase">
+                  скинули задатом ЛЯЯЯЯЯМ ДВЕСТИ 💸
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seen -->
+          <div class="flex items-center justify-end gap-1.5 pr-1">
+            <span class="text-[10px] text-slate-700 group-hover:text-slate-600 font-mono transition-colors">прочитано</span>
+            <span class="text-[10px] text-slate-700 group-hover:text-emerald-600 transition-colors">✓✓</span>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="px-4 py-2 border-t border-slate-800/60 flex items-center justify-between">
+          <span class="text-[10px] text-slate-700 group-hover:text-slate-500 transition-colors font-mono">
+            youtube.com/watch?v=exWPDyvbKis
+          </span>
+          <span class="text-[10px] text-slate-700 group-hover:text-yellow-500 transition-colors">▶</span>
+        </div>
+      </a>
+
+      <!-- Easter egg: subtle link -->
       <div class="flex justify-end">
         <a
           href="https://www.youtube.com/watch?v=exWPDyvbKis"

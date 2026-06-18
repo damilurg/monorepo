@@ -11,12 +11,16 @@ export const load: PageServerLoad = async ({ fetch }) => {
   let date = '';
 
   try {
-    const res = await fetch('https://api.frankfurter.app/latest');
+    const res = await fetch('https://api.frankfurter.app/latest', {
+      signal: AbortSignal.timeout(8_000),
+    });
     if (res.ok) {
       const data = await res.json();
-      rates = data.rates;
-      base = data.base;
-      date = data.date;
+      if (data && typeof data === 'object' && 'rates' in data) {
+        rates = data.rates as Record<string, number>;
+        base = (data.base as string) ?? 'EUR';
+        date = (data.date as string) ?? '';
+      }
     }
   } catch {
     // Return empty on failure

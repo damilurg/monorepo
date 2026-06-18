@@ -26,7 +26,7 @@
     }
   }
 
-  const result = $derived(() => {
+  const result = $derived.by(() => {
     const num = parseFloat(amount);
     if (isNaN(num) || num <= 0) return null;
     return convert(num, fromCurrency, toCurrency);
@@ -38,9 +38,9 @@
     toCurrency = tmp;
   }
 
-  const maxMajorRate = $derived(Math.max(...data.majorRates.map((r) => r.rate)));
-
-  const searchQuery = $state('');
+  const maxMajorRate = $derived(
+    data.majorRates.length > 0 ? Math.max(...data.majorRates.map((r) => r.rate)) : 1,
+  );
   let rateSearch = $state('');
 
   const filteredRates = $derived(
@@ -115,8 +115,8 @@
             <div
               class="w-full bg-slate-800/50 border border-slate-700/50 rounded-xl px-4 py-2.5 font-mono text-indigo-300 text-lg"
             >
-              {#if result() !== null}
-                {result()!.toFixed(4)}
+              {#if result !== null}
+                {result!.toFixed(4)}
               {:else}
                 —
               {/if}
@@ -135,14 +135,14 @@
           </div>
         </div>
 
-        {#if result() !== null && parseFloat(amount) > 0}
+        {#if result !== null && parseFloat(amount) > 0}
           <div class="text-center text-sm text-slate-400 pt-2 border-t border-slate-800">
             <span class="font-mono"
               >{parseFloat(amount).toLocaleString()} {fromCurrency}</span
             >
             <span class="mx-2 text-slate-600">=</span>
             <span class="font-mono text-indigo-400"
-              >{result()!.toLocaleString('en-US', {
+              >{result.toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 4,
               })} {toCurrency}</span
