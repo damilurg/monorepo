@@ -1,0 +1,44 @@
+{
+  "name": "@repo/web",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@inlang/paraglide-sveltekit": "^0.16.1",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@skeletonlabs/skeleton": "^4.15.2",
+    "@skeletonlabs/skeleton-svelte": "^4.15.2",
+    "@sveltejs/adapter-node": "^5.0.0",
+    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "@tailwindcss/vite": "^4.3.1",
+    "@types/leaflet": "^1.9.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "svelte": "^5.0.0",
+    "svelte-check": "^4.0.0",
+    "tailwindcss": "^4.3.1",
+    "typescript": "^5.0.0",
+    "vite": "^6.0.0"
+  },
+  "dependencies": {
+    "@remotion/player": "*",
+    "@repo/flags-store": "workspace:*",
+    "@repo/remotion-compositions": "workspace:*",
+    "@repo/shared": "workspace:*",
+    "leaflet": "^1.9.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "*",
+    "web-vitals": "^5.3.0"
+  }
+}

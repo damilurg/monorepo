@@ -1,0 +1,54 @@
+# ─── Dependencies ─────────────────────────────────────────────────────────────
+node_modules/
+
+# ─── Build outputs ────────────────────────────────────────────────────────────
+.svelte-kit/
+build/
+dist/
+out/
+
+# ─── Lockfiles (use yarn.lock only) ───────────────────────────────────────────
+package-lock.json
+pnpm-lock.yaml
+
+# ─── Environment files ────────────────────────────────────────────────────────
+# Keep .env.example — never commit .env (contains secrets / local config)
+.env
+.env.local
+.env.*.local
+
+# ─── Yarn 4 ───────────────────────────────────────────────────────────────────
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+# .yarn/releases/ is intentionally committed — Yarn binary for corepack zero-install
+
+# ─── Generated files ──────────────────────────────────────────────────────────
+# Paraglide i18n — auto-generated at build time, not source
+apps/web/src/lib/paraglide/
+
+# ─── Runtime state ────────────────────────────────────────────────────────────
+# Feature flag overrides written at runtime by admin panel
+flags-override.json
+**/flags-override.json
+
+# ─── Test artifacts ───────────────────────────────────────────────────────────
+playwright-report/
+test-results/
+coverage/
+
+# ─── Editor ───────────────────────────────────────────────────────────────────
+# JetBrains / IntelliJ — workspace-local state
+.idea/
+# VSCode — keep extensions.json (useful), exclude personal settings
+.vscode/settings.json
+.vscode/launch.json
+
+# ─── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ─── Misc ─────────────────────────────────────────────────────────────────────
+*.log
+*.tsbuildinfo

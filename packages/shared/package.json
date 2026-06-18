@@ -1,0 +1,32 @@
+{
+  "name": "@repo/shared",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "svelte": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./api": "./src/api/index.ts",
+    "./ui": "./src/ui/index.ts",
+    "./utils": "./src/utils/index.ts",
+    "./feature-flags": "./src/feature-flags/index.ts",
+    "./config": "./src/config/index.ts",
+    "./analytics": "./src/analytics/index.ts",
+    "./i18n": "./src/i18n/index.ts"
+  },
+  "scripts": {
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "bits-ui": "^2.18.1",
+    "clsx": "^2.1.1",
+    "lucide-svelte": "^0.383.0",
+    "svelte": "^5.0.0",
+    "svelte-check": "^4.0.0",
+    "tailwind-merge": "^2.6.0",
+    "typescript": "^5.0.0"
+  }
+}

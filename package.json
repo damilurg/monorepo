@@ -1,0 +1,67 @@
+{
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20",
+    "yarn": ">=4.0.0"
+  },
+  "packageManager": "yarn@4.9.2",
+  "scripts": {
+    "dev": "yarn dev:web",
+    "dev:web": "yarn workspace @repo/web dev",
+    "dev:all": "yarn dev:web",
+    "dev:standalone:admin": "yarn workspace @repo/admin dev",
+    "dev:standalone:bank": "yarn workspace @repo/bank dev",
+    "dev:standalone:devtools": "yarn workspace @repo/devtools dev",
+    "dev:standalone:remotion": "yarn workspace @repo/remotion-app dev",
+    "dev:standalone:reports": "yarn workspace @repo/reports dev",
+    "dev:standalone:all": "concurrently \"yarn dev:standalone:admin\" \"yarn dev:standalone:bank\" \"yarn dev:standalone:devtools\" \"yarn dev:standalone:remotion\" \"yarn dev:standalone:reports\"",
+    "build": "yarn build:web && yarn build:admin",
+    "build:web": "yarn workspace @repo/web build",
+    "build:admin": "yarn workspace @repo/admin build",
+    "preview:web": "yarn workspace @repo/web preview",
+    "preview:admin": "yarn workspace @repo/admin preview",
+    "lint": "yarn workspaces run lint",
+    "check": "yarn workspaces run check",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:all": "yarn test && yarn test:e2e",
+    "prepare": "husky",
+    "format": "prettier --write \"**/*.{ts,svelte,json,md}\" --ignore-path .prettierignore",
+    "format:check": "prettier --check \"**/*.{ts,svelte,json,md}\" --ignore-path .prettierignore",
+    "dev:maps": "yarn workspace @repo/maps dev",
+    "dev:reports": "yarn workspace @repo/reports dev"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/svelte": "^5.3.1",
+    "@vitest/coverage-v8": "^4.1.9",
+    "concurrently": "^9.0.0",
+    "husky": "^9.1.7",
+    "jsdom": "^29.1.1",
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.8.4",
+    "prettier-plugin-svelte": "^4.1.1",
+    "vitest": "^4.1.9"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ],
+    "*.svelte": [
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ],
+    "*.{json,md,yaml,yml}": [
+      "prettier --write"
+    ]
+  }
+}

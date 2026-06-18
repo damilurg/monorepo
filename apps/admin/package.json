@@ -1,0 +1,29 @@
+{
+  "name": "@repo/admin",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --port 5174",
+    "build": "vite build",
+    "preview": "vite preview --port 5174",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@sveltejs/adapter-node": "^5.0.0",
+    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "svelte": "^5.0.0",
+    "svelte-check": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^6.0.0"
+  },
+  "dependencies": {
+    "@porsche-design-system/components-js": "^3.35.0",
+    "@repo/flags-store": "workspace:*",
+    "@repo/shared": "workspace:*"
+  }
+}

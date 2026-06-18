@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Enforce Conventional Commits format
+# Examples: feat: add weather module, fix: vin decoder crash, docs: update README
+commit_msg=$(cat "$1")
+pattern='^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?: .{1,100}$'
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo "❌ Commit message must follow Conventional Commits format:"
+  echo "   <type>(<scope>): <subject>"
+  echo ""
+  echo "   Types: feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert"
+  echo "   Example: feat(weather): add 7-day forecast"
+  exit 1
+fi
