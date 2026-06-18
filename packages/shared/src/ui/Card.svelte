@@ -8,12 +8,21 @@
   }
 
   let { class: className = '', onclick, children }: Props = $props();
+
+  const base = 'rounded-xl border border-slate-200 bg-white text-slate-950 shadow-sm';
+  const interactive = 'cursor-pointer hover:shadow-md transition-shadow';
 </script>
 
-<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-<div
-  class={cn('rounded-xl border border-slate-200 bg-white text-slate-950 shadow-sm', onclick && 'cursor-pointer hover:shadow-md transition-shadow', className)}
-  {onclick}
->
-  {@render children()}
-</div>
+{#if onclick}
+  <button
+    type="button"
+    class={cn(base, interactive, className)}
+    {onclick}
+  >
+    {@render children()}
+  </button>
+{:else}
+  <div class={cn(base, className)}>
+    {@render children()}
+  </div>
+{/if}

@@ -5,14 +5,38 @@
   "type": "module",
   "svelte": "./src/index.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./api": "./src/api/index.ts",
-    "./ui": "./src/ui/index.ts",
-    "./utils": "./src/utils/index.ts",
-    "./feature-flags": "./src/feature-flags/index.ts",
-    "./config": "./src/config/index.ts",
-    "./analytics": "./src/analytics/index.ts",
-    "./i18n": "./src/i18n/index.ts"
+    ".": {
+      "svelte": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./api": {
+      "svelte": "./src/api/index.ts",
+      "default": "./src/api/index.ts"
+    },
+    "./ui": {
+      "svelte": "./src/ui/index.ts",
+      "default": "./src/ui/index.ts"
+    },
+    "./utils": {
+      "svelte": "./src/utils/index.ts",
+      "default": "./src/utils/index.ts"
+    },
+    "./feature-flags": {
+      "svelte": "./src/feature-flags/index.ts",
+      "default": "./src/feature-flags/index.ts"
+    },
+    "./config": {
+      "svelte": "./src/config/index.ts",
+      "default": "./src/config/index.ts"
+    },
+    "./analytics": {
+      "svelte": "./src/analytics/index.ts",
+      "default": "./src/analytics/index.ts"
+    },
+    "./i18n": {
+      "svelte": "./src/i18n/index.ts",
+      "default": "./src/i18n/index.ts"
+    }
   },
   "scripts": {
     "check": "svelte-check --tsconfig ./tsconfig.json",

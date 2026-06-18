@@ -1,4 +1,5 @@
 import { type Handle } from '@sveltejs/kit';
+import { dev } from '$app/environment';
 import {
   getFeatureFlagsFromEnv,
   getRenderModesFromEnv,
@@ -7,6 +8,20 @@ import {
 import { readOverrides } from '@repo/flags-store';
 import { env } from '$env/dynamic/public';
 import { isAuthenticated } from '$lib/server/auth.js';
+
+// React Fast Refresh preamble — injected into every HTML response in dev.
+// @vitejs/plugin-react normally does this via transformIndexHtml, but SvelteKit's
+// dev server generates HTML in configureServer (bypassing transformIndexHtml), so
+// the preamble script never reaches the browser.  Without it, every .tsx file that
+// goes through the React plugin throws "can't detect preamble", and compositions
+// loaded via PortalSlideshow's static imports land in TDZ in Vite's module cache.
+const REACT_PREAMBLE = `<script type="module">
+  import RefreshRuntime from '/@react-refresh';
+  RefreshRuntime.injectIntoGlobalHook(window);
+  window.$RefreshReg$ = () => {};
+  window.$RefreshSig$ = () => () => {};
+  window.__vite_plugin_react_preamble_installed__ = true;
+</script>`;
 
 // Portal web-module routes — feature flag guard applied in root layout
 const MODULE_ROUTES: Record<string, ModuleId> = {
@@ -73,5 +88,12 @@ export const handle: Handle = async ({ event, resolve }) => {
   const langCookie = event.cookies.get('lang');
   event.locals.lang = langCookie === 'en' ? 'en' : 'ru';
 
-  return resolve(event);
+  return resolve(event, {
+    transformPageChunk({ html }) {
+      if (dev) {
+        return html.replace('</head>', `${REACT_PREAMBLE}</head>`);
+      }
+      return html;
+    },
+  });
 };

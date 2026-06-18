@@ -8,8 +8,8 @@ export const load: PageServerLoad = ({ locals }) => {
 };
 
 export const actions: Actions = {
-  default: async ({ event, request }) => {
-    const data = await request.formData();
+  default: async (event) => {
+    const data = await event.request.formData();
     const secret = data.get('secret')?.toString() ?? '';
     const ok = setAuthCookie(event, secret);
     if (!ok) return fail(401, { error: 'Неверный пароль' });

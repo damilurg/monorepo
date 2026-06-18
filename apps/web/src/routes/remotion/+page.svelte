@@ -95,6 +95,17 @@
 
   const compositions: CompositionMeta[] = [
     {
+      id: 'HelloWorld',
+      label: '🎨 Hello World',
+      labelEn: '🎨 Hello World',
+      group: 'classic',
+      icon: '🎨',
+      fps: 30,
+      durationInFrames: 150,
+      width: 1920,
+      height: 1080,
+    },
+    {
       id: 'PortalSlideshow',
       label: '🎞 Полный слайдшоу',
       labelEn: '🎞 Full Slideshow',
@@ -128,17 +139,6 @@
       height: 1080,
       moduleKey: m.id,
     })),
-    {
-      id: 'HelloWorld',
-      label: '🎨 Hello World',
-      labelEn: '🎨 Hello World',
-      group: 'classic',
-      icon: '🎨',
-      fps: 30,
-      durationInFrames: 150,
-      width: 1920,
-      height: 1080,
-    },
     {
       id: 'DataViz',
       label: '📊 Data Viz',
@@ -203,11 +203,9 @@
 
     import('$lib/player-mount.js').then(({ mountReactPlayer }) => {
       if (!container.isConnected) return;
-      try {
-        reactRoot = mountReactPlayer(container, comp, l);
-      } catch (e) {
-        console.error('[remotion] mountReactPlayer failed:', e);
-      }
+      mountReactPlayer(container, comp, l)
+        .then((root) => { reactRoot = root; })
+        .catch((e: unknown) => console.error('[remotion] mountReactPlayer failed:', e));
     });
 
     return () => {
@@ -439,6 +437,24 @@
           <div class="mt-1">apps/web/routes/remotion/api/render/+server.ts</div>
           <div class="pl-4 text-slate-500">→ POST compositionId → renderMedia (ffmpeg)</div>
         </div>
+      </div>
+
+      <!-- Easter egg: аало арсен, лям двести -->
+      <div class="flex justify-end">
+        <a
+          href="https://www.youtube.com/watch?v=exWPDyvbKis"
+          target="_blank"
+          rel="noopener noreferrer"
+          title={lang === 'ru'
+            ? 'Ааало, Арсен! Лям двести отправили, понял?'
+            : 'Hello, Arsen! A million two hundred was sent, got it?'}
+          class="group inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-800 hover:border-indigo-700 bg-slate-900/50 hover:bg-indigo-950/40 transition-all duration-300 text-slate-700 hover:text-indigo-400"
+        >
+          <span class="text-base group-hover:animate-bounce">📞</span>
+          <span class="text-[10px] font-mono tracking-wide opacity-40 group-hover:opacity-100 transition-opacity">
+            ааало, Арсен…
+          </span>
+        </a>
       </div>
     </div>
   </div>

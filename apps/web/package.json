@@ -14,8 +14,6 @@
     "@inlang/paraglide-sveltekit": "^0.16.1",
     "@repo/eslint-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "@skeletonlabs/skeleton": "^4.15.2",
-    "@skeletonlabs/skeleton-svelte": "^4.15.2",
     "@sveltejs/adapter-node": "^5.0.0",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
